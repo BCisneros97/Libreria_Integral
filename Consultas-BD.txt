@@ -1,0 +1,21 @@
+1- Todos los productos que vendió X empleado.
+2- Productos vendidos en X fecha.
+3- Promedio de Ventas.
+4- Promedio de Ventas de Clientes Juridicos.
+5- Promedio de Ventas de clientes naturales.
+6- Producto con mayor y menor demanda.
+7- Cantidad de productos adquiridos por el proveedor 'X' .
+8- Cantidad pedidos en el mes y/o 'X'.
+9- Que clientes compran mas 'X' productos.
+10- Que proveedor suministra mas 'Cuadernos' (por ejemplo).
+11.- El Empleado que realizó la mayor cantidad de ventas.
+12.- El cliente Natural y  Jurídico más concurrente.
+14.- El cliente, la fecha y el total mayor de una boleta y de una factura.
+15.- El producto por unidad más costoso y el menos costoso.
+16.- Los empleados que tienes mayor a 5 ventas en X mes.
+17.- Las marcas de 'Cuadernos' cuyo stock supera a 65.
+18.- Total de gasto realizado por el cliente cuyo dni empiece con 75 y su nombre
+       contenga la letra M
+19.-  Cliente jurídico atendido por el empleado que realizó más ventas en x mes.
+20.- Producto cuyo stock permanece constante.
+
