@@ -411,7 +411,7 @@ BEGIN
     
     WHILE (@@sqlstatus <> 2) LOOP
     	UPDATE Comprobante
-        SET Comprobante.monto_total = @monto
+        SET Comprobante.monto_total = round(@monto,1)
         WHERE Comprobante.numero_comp = @num_comp;
         
         FETCH NEXT curs INTO @num_comp, @monto
