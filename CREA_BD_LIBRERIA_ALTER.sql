@@ -325,11 +325,10 @@ CREATE TABLE Comprobante (
         dni_v           CHAR(8) NOT NULL,
         id_cliente      INTEGER NOT NULL,
         fecha           DATE NOT NULL,
-        monto_total     NUMERIC(5,2) NULL CHECK (monto_total>0),
+        monto_total     NUMERIC(5,2) CHECK (monto_total>0),
         FOREIGN KEY dni_v REFERENCES Vendedor,
         FOREIGN KEY id_cliente REFERENCES Cliente
         );
-
 
 INSERT INTO Comprobante (numero_comp,dni_v,id_cliente,fecha,monto_total) VALUES 
 (null,'71365178','16','2016/04/15','105.6'),
@@ -416,6 +415,33 @@ CREATE TABLE Tiene (
         FOREIGN KEY numero_comp REFERENCES Comprobante
         );
 
+CREATE TRIGGER "tri_calcular_monto" AFTER INSERT, DELETE, UPDATE
+ORDER 1 ON "DBA"."Tiene"
+/* REFERENCING OLD AS old_name NEW AS new_name */
+FOR EACH STATEMENT /* WHEN( search_condition ) */
+BEGIN
+    DECLARE @num_comp INTEGER;
+    DECLARE @monto NUMERIC(5,2);
+    
+    DECLARE curs CURSOR FOR
+        SELECT numero_comp, sum(precio_venta*cantidad)*1.18 /*incremento del 18% por IGV*/
+        FROM Tiene
+        GROUP BY numero_comp;
+    OPEN curs;
+    FETCH curs INTO @num_comp, @monto;
+    
+    WHILE (@@sqlstatus) != 2
+    BEGIN 
+        UPDATE Comprobante
+        SET Comprobante.monto_total = @monto
+        WHERE Comprobante.numero_comp = @num_comp;
+        
+        FETCH curs INTO @num_comp, @monto
+    END;
+    
+    CLOSE curs;
+END;
+        
 INSERT INTO Tiene (id_producto,numero_comp,cantidad,precio_venta) VALUES 
 ('3','1','8','24'),
 ('4','1','24','79.6'),
