@@ -124,7 +124,7 @@ SELECT * FROM Persona_Natural;
 CREATE TABLE Proveedor (
         ruc_proveedor   CHAR(11) PRIMARY KEY,
         nombre_pv       VARCHAR(35) NOT NULL,
-        telefono_pv     VARCHAR(9)
+        telefono_pv     VARCHAR(10)
         );
 
 INSERT INTO Proveedor ( ruc_proveedor,nombre_pv,telefono_pv) VALUES 
@@ -142,13 +142,14 @@ CREATE TABLE Categoria (
         descripcion     VARCHAR(30)
         );
 
-INSERT INTO Categoria VALUES ('C001','CUADERNO',null);
-INSERT INTO Categoria VALUES ('C002','CARTUCHERA',null);
-INSERT INTO Categoria VALUES ('C003','COLORES',null);
-INSERT INTO Categoria VALUES ('C004','CINTA',null);
-INSERT INTO Categoria VALUES ('C005','CATALOGO',null);
-INSERT INTO Categoria VALUES ('C006','CARGA',null);
-INSERT INTO Categoria VALUES ('C007','CARTULINA',null);
+INSERT INTO Categoria (id_categoria,nombre_c,descripcion) VALUES 
+('C001','CUADERNO',null),
+('C002','CARTUCHERA',null),
+('C003','COLORES',null),
+('C004','CINTA',null),
+('C005','CATALOGO',null),
+('C006','CARGA',null),
+('C007','CARTULINA',null);
 
 SELECT * FROM Categoria;
 //**************************************************************************************************//
@@ -159,7 +160,7 @@ CREATE TABLE Vendedor (
         s_nombre_v      VARCHAR(20),
         apellido_p_v    VARCHAR(20) NOT NULL,
         apellido_m_v    VARCHAR(20) NOT NULL,
-        telf_v          VARCHAR(9)
+        telf_v          VARCHAR(10)
         );
 
 INSERT INTO Vendedor (dni_v,p_nombre_v,s_nombre_v,apellido_p_v,apellido_m_v,telf_v) VALUES 
@@ -221,8 +222,8 @@ CREATE TABLE Producto (
         id_producto     INTEGER DEFAULT AUTOINCREMENT primary key,
         id_categoria    CHAR(4) NOT NULL,
         nombre_prod     VARCHAR(50) NOT NULL,
-        precio_unidad   DECIMAL(5,2) NOT NULL CHECK (precio_unidad>0),
-        precio_docena   DECIMAL(5,2) NOT NULL CHECK (precio_docena>0),
+        precio_unidad   DECIMAL(8,2) NOT NULL CHECK (precio_unidad>0),
+        precio_docena   DECIMAL(8,2) NOT NULL CHECK (precio_docena>0),
         marca           VARCHAR(25),
         stock           INTEGER DEFAULT 0 CHECK (stock>=0),
         FOREIGN KEY id_categoria REFERENCES Categoria
@@ -270,14 +271,14 @@ SELECT * FROM Producto;
 CREATE TABLE Contiene (
         id_producto     INTEGER NOT NULL,
         id_pedido       INTEGER NOT NULL,
-        cantidad        INTEGER NOT NULL,
-        precio_docena   DECIMAL(5,2) NOT NULL CHECK (precio_docena>0),
+        docenas         INTEGER NOT NULL,
+        precio_docena   DECIMAL(8,2) NOT NULL CHECK (precio_docena>0),
         PRIMARY KEY (id_producto, id_pedido),
         FOREIGN KEY id_producto REFERENCES Producto,
         FOREIGN KEY id_pedido REFERENCES Pedido
         );
 
-INSERT INTO Contiene (id_producto,id_pedido,cantidad,precio_docena) VALUES 
+INSERT INTO Contiene (id_producto,id_pedido,docenas,precio_docena) VALUES 
 ('3','1','180','27'),
 ('5','2','180','48'),
 ('6','3','180','51'),
@@ -305,44 +306,43 @@ CREATE TABLE Comprobante (
         dni_v           CHAR(8) NOT NULL,
         id_cliente      INTEGER NOT NULL,
         fecha           DATE NOT NULL,
-        monto_total     NUMERIC(5,2) NULL CHECK (monto_total>0),
+        monto_total     DECIMAL(8,2) CHECK (monto_total>0),
         FOREIGN KEY dni_v REFERENCES Vendedor,
         FOREIGN KEY id_cliente REFERENCES Cliente
         );
 
-
-INSERT INTO Comprobante (numero_comp,dni_v,id_cliente,fecha,monto_total) VALUES 
-(null,'71365178','16','2016/04/15','105.6'),
-(null,'75502148','3','2016/12/18','35'),
-(null,'72452791','9','2016/08/16','105.4'),
-(null,'73642870','2','2016/07/31','19.5'),
-(null,'74505118','10','2016/05/12','45.7'),
-(null,'72914732','9','2016/04/24','135.8'),
-(null,'75364872','15','2016/08/19','15'),
-(null,'72452791','14','2016/11/10','74'),
-(null,'73642870','2','2016/09/13','24.7'),
-(null,'72914732','10','2016/08/18','156.5'),
-(null,'74505118','16','2016/07/15','16.8'),
-(null,'75502148','11','2016/06/03','16.4'),
-(null,'75364872','10','2016/09/10','20'),
-(null,'72914732','16','2016/12/17','9.1'),
-(null,'73642870','13','2016/01/02','22'),
-(null,'73821463','2','2016/02/19','55.7'),
-(null,'72452791','16','2016/08/30','14.4'),
-(null,'75364872','9','2016/11/14','45'),
-(null,'75364872','9','2016/11/14','24'),
-(null,'75201354','6','2016/10/08','15'),
-(null,'73821463','12','2016/07/26','31.8'),
-(null,'73731492','15','2016/09/04','45.7'),
-(null,'75502148','17','2016/03/24','52.6'),
-(null,'74505118','18','2016/05/08','29.8'),
-(null,'73731492','11','2017/01/15','16.9'),
-(null,'71365178','10','2016/04/01','71.3'),
-(null,'73821463','14','2016/08/13','12'),
-(null,'75201354','8','2016/11/12','9.2'),
-(null,'72452791','9','2016/05/11','13.5'),
-(null,'72914732','2','2016/03/16','22'),
-(null,'73731492','5','2017/01/24','40.4');
+INSERT INTO Comprobante (numero_comp,dni_v,id_cliente,fecha) VALUES 
+(null,'71365178','16','2016/04/15'),
+(null,'75502148','3','2016/12/18'),
+(null,'72452791','9','2016/08/16'),
+(null,'73642870','2','2016/07/31'),
+(null,'74505118','10','2016/05/12'),
+(null,'72914732','9','2016/04/24'),
+(null,'75364872','15','2016/08/19'),
+(null,'72452791','14','2016/11/10'),
+(null,'73642870','2','2016/09/13'),
+(null,'72914732','10','2016/08/18'),
+(null,'74505118','16','2016/07/15'),
+(null,'75502148','11','2016/06/03'),
+(null,'75364872','10','2016/09/10'),
+(null,'72914732','16','2016/12/17'),
+(null,'73642870','13','2016/01/02'),
+(null,'73821463','2','2016/02/19'),
+(null,'72452791','16','2016/08/30'),
+(null,'75364872','9','2016/11/14'),
+(null,'75364872','9','2016/11/14'),
+(null,'75201354','6','2016/10/08'),
+(null,'73821463','12','2016/07/26'),
+(null,'73731492','15','2016/09/04'),
+(null,'75502148','17','2016/03/24'),
+(null,'74505118','18','2016/05/08'),
+(null,'73731492','11','2017/01/15'),
+(null,'71365178','10','2016/04/01'),
+(null,'73821463','14','2016/08/13'),
+(null,'75201354','8','2016/11/12'),
+(null,'72452791','9','2016/05/11'),
+(null,'72914732','2','2016/03/16'),
+(null,'73731492','5','2017/01/24');
 //(null,'71365178','9','2016/10/15','442.5'),
 //(null,'75502148','10','2016/09/25','442.5'),
 //(null,'73642870','8','2016/04/16','442.5'),
@@ -387,14 +387,40 @@ SELECT * FROM Comprobante;
 CREATE TABLE Tiene (
         id_producto     INTEGER NOT NULL,
         numero_comp     INTEGER NOT NULL,
-        precio_venta    NUMERIC(5,2) NOT NULL CHECK (precio_venta>0),
         cantidad        INTEGER NOT NULL,
+        subtotal        DECIMAL(8,2) NOT NULL CHECK (subtotal>0),
         PRIMARY KEY (id_producto, numero_comp),
         FOREIGN KEY id_producto REFERENCES Producto,
         FOREIGN KEY numero_comp REFERENCES Comprobante
         );
 
-INSERT INTO Tiene (id_producto,numero_comp,cantidad,precio_venta) VALUES 
+CREATE TRIGGER "tri_calcular_monto" AFTER INSERT, DELETE, UPDATE
+ORDER 1 ON "DBA"."Tiene"
+/* REFERENCING OLD AS old_name NEW AS new_name */
+FOR EACH STATEMENT /* WHEN( search_condition ) */
+BEGIN
+    DECLARE @num_comp INTEGER;
+    DECLARE @monto DECIMAL(8,2);
+    
+    DECLARE curs CURSOR FOR
+        SELECT numero_comp, sum(subtotal)*1.18 /*incremento del 18% por IGV*/
+        FROM Tiene
+        GROUP BY numero_comp;
+    OPEN curs;
+    FETCH NEXT curs INTO @num_comp, @monto;
+    
+    WHILE (@@sqlstatus <> 2) LOOP
+    	UPDATE Comprobante
+        SET Comprobante.monto_total = @monto
+        WHERE Comprobante.numero_comp = @num_comp;
+        
+        FETCH NEXT curs INTO @num_comp, @monto
+    END LOOP;
+    
+    CLOSE curs;
+END;
+        
+INSERT INTO Tiene (id_producto,numero_comp,cantidad,subtotal) VALUES 
 ('3','1','8','24'),
 ('4','1','24','79.6'),
 ('24','1','2','2'),
